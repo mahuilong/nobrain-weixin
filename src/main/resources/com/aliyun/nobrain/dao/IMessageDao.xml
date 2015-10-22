@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.aliyun.nobrain.dao.IMessageDao">
+	<insert id="createMessageHis" parameterType="com.aliyun.nobrain.entity.MessageVO">
+		insert into
+		message_his(content,request_date,request_uri)
+		value(#{requestContent},now(),#{requestUri})
+	</insert>
+	<select id="findMessageHisList" resultType="com.aliyun.nobrain.entity.MessageVO">
+		select 
+		seq_no as seqNo,
+		content as requestContent,
+		request_date as requestDate,
+		request_uri as requestUri from message_his 
+	</select>
+	<insert id = "createMessage" parameterType="com.aliyun.nobrain.entity.MessageVO">
+		INSERT INTO message 
+		(create_time,
+		msg_type,
+		content,
+		msg_id,
+		pic_url,
+		media_id,
+		format,
+		description,
+		event_key,
+		to_user_name,
+		from_user_name)
+		VALUES(
+		NOW(),
+		#{msgType},
+		#{content},
+		#{msgId},
+		#{picUrl},
+		#{mediaId},
+		#{format},
+		#{description},
+		#{eventKey},
+		#{toUserName},
+		#{fromUserName})
+	</insert>
+	<select id="findMessageList" resultType="com.aliyun.nobrain.entity.MessageVO">
+	 select * from message
+	</select>
+	<select id="getMessage" resultType="com.aliyun.nobrain.entity.MessageVO">
+	 SELECT * FROM message m WHERE 1=1 
+	 <if test = 'id != null'>
+	  	and m.`id`> #{id}
+	 </if>
+	</select>
+	<select id="getMessageForWall" resultType="com.aliyun.nobrain.entity.MessageVO">
+	 SELECT * FROM message m WHERE 1=1 
+	 <if test = 'endId != null'>
+	  	and m.`id` <![CDATA[>]]> #{endId}
+	 </if>
+	 <if test = 'startId != null'>
+	  	and m.`id` <![CDATA[<]]> #{startId}
+	 </if>
+	 <if test ='pageSize != null' >
+	   LIMIT  #{pageSize}
+	 </if>
+	</select>
+	<select id ="getEndMessage" resultType="com.aliyun.nobrain.entity.MessageVO">
+		SELECT * FROM message WHERE 
+		id <![CDATA[>]]>(SELECT MAX(id)- #{pageSize} FROM message)
+	</select>
+</mapper>  

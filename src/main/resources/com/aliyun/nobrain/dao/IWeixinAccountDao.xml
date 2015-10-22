@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://10.20.91.130/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.aliyun.nobrain.dao.IWeixinAccountDao">
+
+
+	<select id="listForPage" parameterType="com.aliyun.nobrain.entity.WeixinAccountVO" resultType="com.aliyun.nobrain.entity.WeixinAccountVO">
+		SELECT * FROM t_weixin_account ORDER BY ID DESC
+	</select>
+
+	<select id="getById" parameterType="java.lang.String" resultType="com.aliyun.nobrain.entity.WeixinAccountVO">
+		SELECT * FROM t_weixin_account WHERE ID = #{id}
+	</select>
+	
+	<select id="getByAccount" parameterType="java.lang.String" resultType="com.aliyun.nobrain.entity.WeixinAccountVO">
+		SELECT * FROM t_weixin_account WHERE account = #{account} ORDER BY ID DESC limit 1
+	</select>
+	
+	<select id="getSingleAccount" resultType="com.aliyun.nobrain.entity.WeixinAccountVO">
+		SELECT * FROM t_weixin_account ORDER BY ID DESC limit 1
+	</select>
+
+	<insert id="add" parameterType="com.aliyun.nobrain.entity.WeixinAccountVO" flushCache="true">
+		INSERT INTO t_weixin_account ( NAME,ACCOUNT,APPID,APPSECRET,URL,TOKEN,MSGCOUNT,ID,CREATETIME )  VALUES ( #{name},#{account},#{appid},#{appsecret},#{url},#{token},#{msgcount},#{id},#{createtime} ) 
+	</insert>
+
+	<update id="update" parameterType="com.aliyun.nobrain.entity.WeixinAccountVO" flushCache="true">
+		UPDATE t_weixin_account SET NAME = #{name},ACCOUNT = #{account},APPID = #{appid},APPSECRET = #{appsecret},URL = #{url},TOKEN = #{token},MSGCOUNT = #{msgcount},CREATETIME = #{createtime} WHERE ID = #{id} 
+	</update>
+
+	<delete id="delete" parameterType="com.aliyun.nobrain.entity.WeixinAccountVO" >
+		DELETE FROM t_weixin_account WHERE ID = #{id}
+	</delete>
+
+</mapper>
